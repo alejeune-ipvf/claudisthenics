@@ -1,0 +1,102 @@
+{
+  "version": "0.1",
+  "session": {
+    "frequency_per_week": 3,
+    "supersets": [["pull_vertical", "squat"], ["dip", "hinge"], ["row", "push"]],
+    "work_sets": 3,
+    "rest_seconds": 90,
+    "rules": {
+      "rep_range": [5, 8],
+      "hold_range_seconds": [20, 60],
+      "reps_in_reserve": 2
+    }
+  },
+  "tracks": ["pull_vertical", "row", "push", "dip", "squat", "hinge"],
+  "levels": [
+    {
+      "id": 0,
+      "name": "Réveil",
+      "min_weeks": 3,
+      "exercises": {
+        "pull_vertical": { "name": "Dead hang + scapular pulls", "type": "hold", "target": [20, 45], "extra": "3×5 scapular pulls" },
+        "row": { "name": "Vertical row", "type": "reps", "target": [5, 8] },
+        "push": { "name": "Incline push-up (table height)", "type": "reps", "target": [5, 8] },
+        "dip": { "name": "Support hold", "type": "hold", "target": [15, 30] },
+        "squat": { "name": "Chair-assisted squat", "type": "reps", "target": [5, 8] },
+        "hinge": { "name": "Glute bridge", "type": "reps", "target": [8, 12] }
+      },
+      "core": ["Plank 20-30s", "Side plank 15s/side", "Prone back extension x8"]
+    },
+    {
+      "id": 1,
+      "name": "Fondations",
+      "exercises": {
+        "pull_vertical": { "name": "Band-assisted pull-up (thick band)", "type": "reps", "target": [5, 8], "extra": "+ 60s dead hang" },
+        "row": { "name": "Incline row (~45°)", "type": "reps", "target": [5, 8] },
+        "push": { "name": "Low-incline push-up (chair height)", "type": "reps", "target": [5, 8] },
+        "dip": { "name": "Negative dip (5s descent)", "type": "reps", "target": [3, 5] },
+        "squat": { "name": "Full bodyweight squat", "type": "reps", "target": [5, 8] },
+        "hinge": { "name": "Single-leg glute bridge", "type": "side_reps", "target": [5, 8] }
+      },
+      "core": ["Hollow tuck hold", "Side plank", "Back extension"]
+    },
+    {
+      "id": 2,
+      "name": "Construction",
+      "exercises": {
+        "pull_vertical": { "name": "Band-assisted pull-up (medium band) or negatives", "type": "reps", "target": [5, 8] },
+        "row": { "name": "Horizontal row", "type": "reps", "target": [5, 8] },
+        "push": { "name": "Full push-up", "type": "reps", "target": [5, 8] },
+        "dip": { "name": "Band-assisted dip", "type": "reps", "target": [5, 8] },
+        "squat": { "name": "Split squat", "type": "side_reps", "target": [5, 8] },
+        "hinge": { "name": "Banded Romanian deadlift", "type": "reps", "target": [8, 12] }
+      },
+      "core": ["Hollow hold", "Band Pallof press", "Arch hold"]
+    },
+    {
+      "id": 3,
+      "name": "Première Traction",
+      "exercises": {
+        "pull_vertical": { "name": "Strict pull-up", "type": "reps", "target": [3, 8] },
+        "row": { "name": "Wide / feet-elevated row", "type": "reps", "target": [5, 8] },
+        "push": { "name": "Diamond push-up", "type": "reps", "target": [5, 8] },
+        "dip": { "name": "Parallel bar dip", "type": "reps", "target": [3, 8] },
+        "squat": { "name": "Bulgarian split squat", "type": "side_reps", "target": [5, 8] },
+        "hinge": { "name": "Nordic curl negative", "type": "reps", "target": [3, 5] }
+      },
+      "core": ["Tucked L-sit", "Pallof press", "Arch raises"]
+    },
+    {
+      "id": 4,
+      "name": "Consolidation",
+      "exercises": {
+        "pull_vertical": { "name": "L-sit pull-up / paused pull-up", "type": "reps", "target": [5, 8] },
+        "row": { "name": "Archer row", "type": "side_reps", "target": [4, 6] },
+        "push": { "name": "Pseudo-planche push-up", "type": "reps", "target": [5, 8] },
+        "dip": { "name": "Ring dip", "type": "reps", "target": [3, 8] },
+        "squat": { "name": "Deep step-up / tempo Bulgarian", "type": "side_reps", "target": [8, 8] },
+        "hinge": { "name": "Slow nordic negative (8s)", "type": "reps", "target": [5, 5] }
+      },
+      "core": ["L-sit 10-20s", "Ring rollout", "Reverse hyper"]
+    },
+    {
+      "id": 5,
+      "name": "Envol",
+      "exercises": {
+        "pull_vertical": { "name": "Archer pull-up", "type": "side_reps", "target": [3, 6] },
+        "row": { "name": "One-arm row progression", "type": "side_reps", "target": [3, 5] },
+        "push": { "name": "Ring push-up / deep pseudo-planche", "type": "reps", "target": [5, 8] },
+        "dip": { "name": "Ring dip (rings turned out)", "type": "reps", "target": [5, 8] },
+        "squat": { "name": "Skater squat → pistol progression", "type": "side_reps", "target": [3, 5] },
+        "hinge": { "name": "Band-assisted nordic curl", "type": "reps", "target": [3, 5] }
+      },
+      "core": ["L-sit 30s", "Dragon flag negative"]
+    },
+    {
+      "id": 6,
+      "name": "Spécialisation",
+      "open_ended": true,
+      "specializations": ["muscle-up", "handstand push-up", "pistol squat", "front lever", "one-arm pull-up"]
+    }
+  ]
+}

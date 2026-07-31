@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Claudisthenics — viz proof of concept</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #111; color: #eee;
+         display: flex; flex-direction: column; align-items: center; padding: 2rem; }
+  svg { background: #1b1b1f; border-radius: 12px; }
+  polyline { stroke: #7dd3fc; stroke-width: 6; stroke-linecap: round;
+             stroke-linejoin: round; fill: none; }
+  circle { fill: #7dd3fc; }
+  .ground { stroke: #444; stroke-width: 2; }
+  p { max-width: 40ch; color: #999; text-align: center; }
+</style>
+</head>
+<body>
+<h2>Push-up</h2>
+<svg width="340" height="240" viewBox="0 0 340 240">
+  <line class="ground" x1="10" y1="212" x2="330" y2="212"/>
+  <polyline id="bodyLine"/>
+  <polyline id="armLine"/>
+  <circle id="headDot" r="13"/>
+</svg>
+<p>Pose-interpolation demo: each exercise is a handful of key poses (joint coordinates);
+the app tweens between them. One tiny data block per exercise, no image assets.</p>
+<script>
+  // Two key poses: joint name -> [x, y]. Feet and hands stay planted.
+  const TOP = {
+    ankle: [60, 205], knee: [115, 190], hip: [165, 172],
+    shoulder: [245, 150], head: [272, 140],
+    elbow: [252, 178], wrist: [258, 208]
+  };
+  const BOTTOM = {
+    ankle: [60, 205], knee: [114, 196], hip: [162, 186],
+    shoulder: [240, 182], head: [270, 176],
+    elbow: [281, 193], wrist: [258, 208]
+  };
+
+  const bodyLine = document.getElementById("bodyLine");
+  const armLine  = document.getElementById("armLine");
+  const headDot  = document.getElementById("headDot");
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  function draw(t) {
+    const P = {};
+    for (const k in TOP) P[k] = [lerp(TOP[k][0], BOTTOM[k][0], t),
+                                 lerp(TOP[k][1], BOTTOM[k][1], t)];
+    bodyLine.setAttribute("points",
+      [P.ankle, P.knee, P.hip, P.shoulder].map(p => p.join(",")).join(" "));
+    armLine.setAttribute("points",
+      [P.shoulder, P.elbow, P.wrist].map(p => p.join(",")).join(" "));
+    headDot.setAttribute("cx", P.head[0]);
+    headDot.setAttribute("cy", P.head[1]);
+  }
+
+  const start = performance.now();
+  (function loop(now) {
+    // 2 s per rep, eased down-and-up
+    const t = (1 - Math.cos((now - start) / 1000 * Math.PI)) / 2;
+    draw(t);
+    requestAnimationFrame(loop);
+  })(start);
+</script>
+</body>
+</html>
