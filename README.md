@@ -12,6 +12,8 @@ low-rep harder-variant progressions instead of Lafay's high-rep endurance style.
 - `program/levels.json` — the same program as machine-readable data (the app consumes this)
 - `viz/demo-pushup.html` — proof-of-concept of the exercise visualization approach
   (pose-interpolated stick figures). Open directly in a browser.
+- `viz/level0-1.html` — full animated gallery of every Level 0 and Level 1 exercise
+  (16 tiles, shared pose engine). Open directly in a browser.
 - `app/` — (later) the PWA: workout runner, timers, exercise viz, performance log
 
 ## Design decisions (agreed)

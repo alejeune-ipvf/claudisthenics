@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Claudisthenics — Level 0–1 exercise gallery</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #111; color: #eee;
+         margin: 0; padding: 2rem; }
+  h1 { text-align: center; font-size: 1.4rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 1.2rem; max-width: 1400px; margin: 0 auto; }
+  .tile { background: #1b1b1f; border-radius: 12px; padding: .8rem; }
+  .tile h3 { margin: .2rem 0 .1rem; font-size: 1rem; font-weight: 600; }
+  .tile .note { color: #999; font-size: .82rem; margin: 0 0 .5rem; min-height: 2.2em; }
+  .badge { display: inline-block; font-size: .7rem; padding: .1em .5em;
+           border-radius: 999px; background: #334155; color: #cbd5e1;
+           vertical-align: middle; margin-left: .4em; }
+  .badge.hold { background: #713f12; color: #fde68a; }
+  svg { width: 100%; height: auto; background: #141417; border-radius: 8px; }
+  .fig  { stroke: #7dd3fc; stroke-width: 6; stroke-linecap: round;
+          stroke-linejoin: round; fill: none; }
+  .fig2 { stroke: #38758f; stroke-width: 6; stroke-linecap: round;
+          stroke-linejoin: round; fill: none; }
+  .headfill { fill: #7dd3fc; }
+  .prop { stroke: #555; stroke-width: 4; stroke-linecap: round; fill: none; }
+  .propfill { fill: #26262b; stroke: #555; stroke-width: 2; }
+  .band { stroke: #f472b6; stroke-width: 3; stroke-dasharray: 6 5; fill: none; }
+  .ground { stroke: #3a3a40; stroke-width: 2; }
+</style>
+</head>
+<body>
+<h1>Claudisthenics — Levels 0 &amp; 1, all exercises</h1>
+<div class="grid" id="grid"></div>
+<script>
+// ---------------------------------------------------------------------------
+// Each exercise: name, level, note, optional props (static scenery),
+// poses = [A] (hold) or [A, B] (animated, sine-tweened), optional band
+// (elastic drawn from an anchor point to a moving joint).
+// Joints: ankle knee hip shoulder elbow wrist head (+ optional knee2/ankle2
+// = second leg, elbow2/wrist2 = second arm). Side view, ground at y=212.
+// ---------------------------------------------------------------------------
+const EXERCISES = [
+{ name: "Dead hang + scapular pulls", level: 0, note: "Hang 3×20–45 s · 3×5 scap pulls (arms stay straight, shoulders do the work)",
+  period: 2200,
+  props: [{t:"line", x1:110, y1:30, x2:230, y2:30}],
+  poses: [
+    {wrist:[170,34], elbow:[170,68], shoulder:[170,104], hip:[174,152], knee:[168,182], ankle:[176,206], head:[186,96]},
+    {wrist:[170,34], elbow:[170,64], shoulder:[170,92],  hip:[174,140], knee:[168,170], ankle:[176,194], head:[186,84]} ] },
+
+{ name: "Vertical row (rings)", level: 0, note: "3×5→8 · body ~30° from upright, pull chest to hands",
+  props: [{t:"line", x1:210, y1:20, x2:210, y2:78}, {t:"circ", cx:210, cy:84, r:6}],
+  poses: [
+    {ankle:[160,208], knee:[158,176], hip:[150,146], shoulder:[140,96],  head:[136,80],  elbow:[172,92],  wrist:[204,86]},
+    {ankle:[160,208], knee:[160,176], hip:[158,146], shoulder:[168,90],  head:[166,74],  elbow:[188,112], wrist:[204,86]} ] },
+
+{ name: "Incline push-up (table height)", level: 0, note: "3×5→8 · body straight, chest to the edge",
+  props: [{t:"rect", x:205, y:140, w:70, h:72}],
+  poses: [
+    {ankle:[62,208], knee:[102,180], hip:[140,153], shoulder:[200,112], head:[222,100], elbow:[206,126], wrist:[212,140]},
+    {ankle:[62,208], knee:[102,187], hip:[142,167], shoulder:[207,133], head:[230,124], elbow:[228,138], wrist:[212,140]} ] },
+
+{ name: "Support hold (dip bars)", level: 0, note: "3×15–30 s · arms locked, shoulders down, no shrugging", hold: true,
+  props: [{t:"line", x1:190, y1:180, x2:190, y2:212}, {t:"line", x1:172, y1:180, x2:208, y2:180}],
+  poses: [
+    {wrist:[190,180], elbow:[190,152], shoulder:[190,124], head:[195,106], hip:[191,170], knee:[176,196], ankle:[184,209]} ] },
+
+{ name: "Chair-assisted squat", level: 0, note: "3×5→8 · light hand support, sit back and down",
+  props: [{t:"line", x1:250, y1:118, x2:250, y2:212}, {t:"line", x1:250, y1:165, x2:295, y2:165}, {t:"line", x1:295, y1:165, x2:295, y2:212}],
+  poses: [
+    {ankle:[160,208], knee:[158,172], hip:[155,134], shoulder:[158,92],  head:[160,76],  elbow:[200,110], wrist:[248,122]},
+    {ankle:[160,208], knee:[178,178], hip:[142,172], shoulder:[150,128], head:[152,112], elbow:[198,132], wrist:[248,122]} ] },
+
+{ name: "Glute bridge", level: 0, note: "3×8→12 · squeeze at the top, straight line knee–hip–shoulder",
+  poses: [
+    {ankle:[200,208], knee:[178,172], hip:[140,206], shoulder:[80,206], head:[56,200], elbow:[105,208], wrist:[128,208]},
+    {ankle:[200,208], knee:[180,166], hip:[145,170], shoulder:[80,206], head:[56,200], elbow:[105,208], wrist:[128,208]} ] },
+
+{ name: "Plank", level: 0, note: "3×20–30 s · straight line, no sagging hips", hold: true,
+  poses: [
+    {ankle:[60,198], knee:[108,192], hip:[152,182], shoulder:[212,170], head:[238,160], elbow:[210,200], wrist:[240,202]} ] },
+
+{ name: "Side plank", level: 0, note: "3×15 s / side · hips stacked and lifted", hold: true,
+  poses: [
+    {ankle:[70,202], knee:[112,190], hip:[150,180], shoulder:[210,162], head:[236,152], elbow:[208,202], wrist:[238,204], elbow2:[216,128], wrist2:[222,100]} ] },
+
+{ name: "Prone back extension", level: 0, note: "3×8 · lift chest, slow and controlled, look down",
+  poses: [
+    {ankle:[90,206], knee:[130,206], hip:[170,206], shoulder:[225,202], head:[250,196], elbow:[238,198], wrist:[246,190]},
+    {ankle:[90,206], knee:[130,206], hip:[170,204], shoulder:[222,182], head:[248,168], elbow:[232,176], wrist:[242,168]} ] },
+
+{ name: "Band-assisted pull-up", level: 1, note: "3×5→8 · band over the bar, knee in the loop, chin over bar",
+  period: 2600,
+  props: [{t:"line", x1:110, y1:30, x2:230, y2:30}],
+  band: {anchor:[170,30], joint:"knee"},
+  poses: [
+    {wrist:[170,34], elbow:[172,66], shoulder:[170,100], hip:[172,148], knee:[165,175], ankle:[155,198], head:[186,92]},
+    {wrist:[170,34], elbow:[192,50], shoulder:[172,58],  hip:[174,110], knee:[167,140], ankle:[157,165], head:[186,36]} ] },
+
+{ name: "Incline row (~45°)", level: 1, note: "3×5→8 · lower the rings to steepen the angle vs Level 0",
+  props: [{t:"line", x1:210, y1:20, x2:210, y2:100}, {t:"circ", cx:210, cy:106, r:6}],
+  poses: [
+    {ankle:[180,208], knee:[163,186], hip:[146,166], shoulder:[115,128], head:[110,112], elbow:[160,116], wrist:[204,108]},
+    {ankle:[180,208], knee:[172,184], hip:[165,160], shoulder:[152,110], head:[148,94],  elbow:[180,128], wrist:[204,108]} ] },
+
+{ name: "Low-incline push-up (chair height)", level: 1, note: "3×5→8 · same as Level 0, lower support",
+  props: [{t:"rect", x:205, y:172, w:70, h:40}],
+  poses: [
+    {ankle:[52,208], knee:[98,189], hip:[140,172], shoulder:[202,146], head:[224,134], elbow:[206,158], wrist:[212,170]},
+    {ankle:[52,208], knee:[98,194], hip:[140,182], shoulder:[205,162], head:[228,152], elbow:[228,168], wrist:[212,170]} ] },
+
+{ name: "Negative dip (5 s descent)", level: 1, note: "3×3→5 · jump/step to the top, lower as slowly as you can",
+  period: 3500,
+  props: [{t:"line", x1:190, y1:150, x2:190, y2:212}, {t:"line", x1:172, y1:150, x2:208, y2:150}],
+  poses: [
+    {wrist:[190,150], elbow:[190,124], shoulder:[190,96],  head:[195,80],  hip:[192,144], knee:[176,176], ankle:[184,200]},
+    {wrist:[190,150], elbow:[212,142], shoulder:[190,134], head:[195,118], hip:[192,180], knee:[172,196], ankle:[182,206]} ] },
+
+{ name: "Full bodyweight squat", level: 1, note: "3×5→8 · heels down, hips below parallel, arms out for balance",
+  poses: [
+    {ankle:[170,208], knee:[168,172], hip:[165,134], shoulder:[168,90],  head:[170,74],  elbow:[182,108], wrist:[192,122]},
+    {ankle:[170,208], knee:[190,180], hip:[150,182], shoulder:[160,140], head:[163,124], elbow:[188,142], wrist:[216,138]} ] },
+
+{ name: "Single-leg glute bridge", level: 1, note: "3×5→8 / side · free leg extended, hips stay level",
+  poses: [
+    {ankle:[200,208], knee:[178,172], hip:[140,206], shoulder:[80,206], head:[56,200], elbow:[105,208], wrist:[128,208], knee2:[180,180], ankle2:[215,155]},
+    {ankle:[200,208], knee:[180,166], hip:[145,170], shoulder:[80,206], head:[56,200], elbow:[105,208], wrist:[128,208], knee2:[195,140], ankle2:[228,122]} ] },
+
+{ name: "Hollow tuck hold", level: 1, note: "3×15–25 s · lower back pressed to the floor, shoulders off it", hold: true,
+  poses: [
+    {ankle:[208,182], knee:[182,168], hip:[150,202], shoulder:[100,182], head:[76,168], elbow:[122,172], wrist:[146,162]} ] },
+];
+
+// ------------------------------ engine -------------------------------------
+const SVGNS = "http://www.w3.org/2000/svg";
+const lerp = (a, b, t) => a + (b - a) * t;
+
+function el(tag, attrs, cls) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (cls) e.setAttribute("class", cls);
+  return e;
+}
+
+const anims = [];
+const grid = document.getElementById("grid");
+
+for (const ex of EXERCISES) {
+  const tile = document.createElement("div");
+  tile.className = "tile";
+  tile.innerHTML = `<h3>${ex.name}<span class="badge">L${ex.level}</span>` +
+    (ex.hold ? `<span class="badge hold">HOLD</span>` : ``) +
+    `</h3><p class="note">${ex.note}</p>`;
+  const svg = el("svg", {viewBox: "0 0 340 240"});
+  svg.appendChild(el("line", {x1:10, y1:212, x2:330, y2:212}, "ground"));
+  for (const p of (ex.props || [])) {
+    if (p.t === "line") svg.appendChild(el("line", {x1:p.x1, y1:p.y1, x2:p.x2, y2:p.y2}, "prop"));
+    if (p.t === "rect") svg.appendChild(el("rect", {x:p.x, y:p.y, width:p.w, height:p.h, rx:4}, "propfill"));
+    if (p.t === "circ") svg.appendChild(el("circle", {cx:p.cx, cy:p.cy, r:p.r}, "prop"));
+  }
+  const parts = {
+    band:  ex.band ? svg.appendChild(el("polyline", {}, "band")) : null,
+    leg2:  svg.appendChild(el("polyline", {}, "fig2")),
+    arm2:  svg.appendChild(el("polyline", {}, "fig2")),
+    body:  svg.appendChild(el("polyline", {}, "fig")),
+    arm:   svg.appendChild(el("polyline", {}, "fig")),
+    head:  svg.appendChild(el("circle", {r:12}, "headfill")),
+  };
+  tile.appendChild(svg);
+  grid.appendChild(tile);
+
+  const pts = js => js.map(p => p.join(",")).join(" ");
+  function draw(t) {
+    const A = ex.poses[0], B = ex.poses[1] || A;
+    const P = {};
+    for (const k in A) P[k] = [lerp(A[k][0], B[k][0], t), lerp(A[k][1], B[k][1], t)];
+    parts.body.setAttribute("points", pts([P.ankle, P.knee, P.hip, P.shoulder]));
+    parts.arm.setAttribute("points", pts([P.shoulder, P.elbow, P.wrist]));
+    parts.leg2.setAttribute("points", P.knee2 ? pts([P.hip, P.knee2, P.ankle2]) : "");
+    parts.arm2.setAttribute("points", P.elbow2 ? pts([P.shoulder, P.elbow2, P.wrist2]) : "");
+    parts.head.setAttribute("cx", P.head[0]);
+    parts.head.setAttribute("cy", P.head[1]);
+    if (parts.band) parts.band.setAttribute("points", pts([ex.band.anchor, P[ex.band.joint]]));
+  }
+  draw(0);
+  if (!ex.hold) anims.push({draw, period: ex.period || 2000});
+}
+
+const start = performance.now();
+(function loop(now) {
+  for (const a of anims) {
+    const t = (1 - Math.cos((now - start) / a.period * Math.PI)) / 2;
+    a.draw(t);
+  }
+  requestAnimationFrame(loop);
+})(start);
+</script>
+</body>
+</html>
