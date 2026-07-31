@@ -1,4 +1,4 @@
-# Claudisthenics — Program v0.1 (draft for review)
+# Claudisthenics — Program v0.2 (draft for review)
 
 Base: r/bodyweightfitness Recommended Routine (RR), restructured into Lafay-style
 unlockable levels. Low-rep strength progressions (3×5 → 3×8, then harder variant),
@@ -21,9 +21,12 @@ not high-rep endurance.
   Timed holds: 3×20 s → 3×60 s.
 - **Two-in-reserve rule**: stop every set ~2 reps before failure. Grinding to failure is
   how comebacks end in tendinitis.
-- **Level unlock**: when **all six tracks** are at top range, schedule an **unlock test day**:
-  hit every top-range target in a single session, prescribed form. Pass → next level.
+- **Level unlock — Graduation day**: when **all six tracks** are at top range, schedule a
+  dedicated **graduation day** (its own session, not tacked onto a workout): hit every
+  top-range target in a single session, prescribed form. Pass → next level unlocked.
   Fail → nothing lost, retry next week.
+- **Busy weeks**: the target is 3 sessions/week. A 2-session week happens; it delays
+  progress but never resets it. Two full-body sessions beat zero.
 - **Level 0 exception**: minimum 3 weeks regardless of performance. Tendons adapt slower
   than muscles, and 10-years-ago motor patterns come back faster than the tissue does.
 
@@ -124,9 +127,15 @@ Structure to be designed when someone actually gets here.
 
 ---
 
-## Open questions for review
+## Decisions (settled 2026-07-31)
 
-1. Exercise selection per level — anything you hated / loved in Lafay worth swapping in?
-2. 3×/week fixed, or allow a 2×/week "maintenance mode" for busy weeks?
-3. Unlock test as a distinct ceremony day (Lafay-style) vs. rolling unlock — currently distinct.
-4. Names of levels — placeholder French names, happy to rename.
+1. Exercise selection: grounded in modern calisthenics as drafted, no Lafay swap-ins.
+2. Frequency: 3×/week target, with the busy-week rule above.
+3. Level unlock: distinct **graduation day** ceremony (Lafay-style), not rolling unlock.
+4. Level names: kept as is.
+
+## Band strengths (owner: 75 kg)
+
+PULLUP & DIP resistance ranges — red 4–12 kg · black 7–24 kg · blue 16–36 kg · green 23–54 kg.
+Program mapping: L1 "thick band" = **green**, L2 "medium band" = **blue**, optional last
+bridge before strict pull-ups = **black**. Red is warm-up/stretching only.
