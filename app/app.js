@@ -139,7 +139,7 @@ function renderWorkout(root) {
       <svg class="viz"></svg>
       <p class="cue">${ex.cue || ""}</p>
       <p class="target">Target: <b>${targetText(ex)}</b>${prev !== null ? ` · last time: ${prev}` : ""}</p>
-      ${isHold ? `<button class="secondary big" id="holdBtn">▶ Start hold</button>` : ""}
+      ${isHold ? `<button class="secondary big" id="holdBtn">▶ Start hold (beeps at target)</button>` : ""}
       <div class="stepper">
         <button id="minus">−</button>
         <span id="val">${start}</span><span class="unit">${isHold ? "s" : "reps"}</span>
@@ -153,19 +153,31 @@ function renderWorkout(root) {
     $("#minus").onclick = () => { val = Math.max(0, val - 1); show(); };
     $("#plus").onclick = () => { val++; show(); };
     if (isHold) {
+      // Countdown, not stopwatch: hands are busy mid-hold. Set the planned
+      // duration with the stepper, start, put the phone down. Beeps at 3-2-1,
+      // long beep at 0 (= hold done, start any follow-up like scap pulls),
+      // then counts overtime. One tap when you're free again logs actual time.
       let running = false, t0 = 0;
       $("#holdBtn").onclick = () => {
         if (!running) {
           running = true; t0 = Date.now();
-          $("#holdBtn").textContent = "0 s — tap to stop";
+          const planned = val;
+          let lastLeft = null;
           holdTimer = setInterval(() => {
-            $("#holdBtn").textContent = `${Math.floor((Date.now() - t0) / 1000)} s — tap to stop`;
-          }, 250);
+            const left = planned - Math.floor((Date.now() - t0) / 1000);
+            if (left !== lastLeft) {
+              lastLeft = left;
+              if (left > 0 && left <= 3) beep(660);
+              if (left === 0) beep(990, 0.4);
+            }
+            $("#holdBtn").textContent = left > 0
+              ? `${left} s left — hold!`
+              : `+${-left} s over — tap when you're done`;
+          }, 200);
         } else {
           running = false; clearInterval(holdTimer);
           val = Math.round((Date.now() - t0) / 1000); show();
           $("#holdBtn").textContent = "▶ Restart hold";
-          beep();
         }
       };
     }
