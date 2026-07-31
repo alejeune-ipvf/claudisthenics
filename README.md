@@ -14,7 +14,11 @@ low-rep harder-variant progressions instead of Lafay's high-rep endurance style.
   (pose-interpolated stick figures). Open directly in a browser.
 - `viz/level0-1.html` — full animated gallery of every Level 0 and Level 1 exercise
   (16 tiles, shared pose engine). Open directly in a browser.
-- `app/` — (later) the PWA: workout runner, timers, exercise viz, performance log
+- `app/` — the PWA (v0.1): workout runner (supersets, rest timers, wake lock, sound cues),
+  inline exercise viz, local performance log, progress bars + graduation-day eligibility,
+  export/import backup, type-RESET data wipe. Plain JS, no build step, no dependencies.
+  Test locally: open `app/index.html` in a browser (or `python -m http.server` in `app/`
+  for service-worker behavior).
 
 ## Design decisions (agreed)
 
@@ -26,4 +30,5 @@ low-rep harder-variant progressions instead of Lafay's high-rep endurance style.
 
 ## Status
 
-Program draft under review. App not started.
+Program v0.2 (decisions locked). App v0.1 built, pending first hands-on review.
+TODO: PNG apple-touch-icon (iOS ignores SVG icons on the home screen), GitHub Pages deploy.
