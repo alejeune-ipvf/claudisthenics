@@ -1,8 +1,8 @@
 // Cache-first service worker. Bump VERSION on every deploy to invalidate.
-const VERSION = "claudisthenics-v0.1.0";
+const VERSION = "claudisthenics-v0.1.1";
 const ASSETS = [
   "./", "index.html", "styles.css", "data.js", "viz.js", "store.js", "app.js",
-  "manifest.webmanifest", "icon.svg"
+  "manifest.webmanifest", "icon.svg", "apple-touch-icon.png"
 ];
 
 self.addEventListener("install", e => {
